@@ -12,7 +12,7 @@ from rl.memory import SequentialMemory
 from mortalkombat_env import PlayerOneNetworkControllerWrapper, ObservationWraperMK, make_env
 
 
-#stackover flow says its necessary :D 
+#stackover flow says its necessary :D  #only if version of tf is above or equal 2
 #tf.compat.v1.disable_eager_execution()
 
 env = make_env()

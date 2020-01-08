@@ -59,7 +59,7 @@ class ObservationWraperMK(gym.ObservationWrapper):
             self.enemy_hp =  120
             reward = 0
         else:
-            reward = (self.enemy_hp - self.player_hp)
+            reward = (  self.player_hp - self.enemy_hp)
             self.player_hp = info['health']
             self.enemy_hp = info["enemy_health"]
 
