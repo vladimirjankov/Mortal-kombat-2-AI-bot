@@ -4,7 +4,7 @@ import tensorflow as tf
 from keras.models import Sequential
 
 
-from keras.layers import Dense, Activation, Flatten, Conv2D
+from keras.layers import Dense, Activation, Flatten, Conv2D,SimpleRNN,GlobalAveragePooling2D
 from keras.optimizers import Adam
 from rl.agents.dqn import DQNAgent
 from rl.policy import EpsGreedyQPolicy, GreedyQPolicy, MaxBoltzmannQPolicy
@@ -18,16 +18,13 @@ from mortalkombat_env import PlayerOneNetworkControllerWrapper, ObservationWrape
 env = make_env()
 
 model = Sequential()
-model.add(Conv2D(filters=64, kernel_size=8, strides=8, activation="relu", input_shape=(4, 112, 160),
-                 data_format="channels_first"))
-#model.add(Conv2D(filters=32, kernel_size=4, strides=4, activation="relu" ))
-model.add(Conv2D(filters=16, kernel_size=3, strides=2, activation="relu"))
-model.add(Flatten())
-model.add(Dense(512, activation='relu'))
-model.add(Dense(256, activation='relu'))
-#model.add(Dense(32, activation='relu'))
-model.add(Dense(env.action_space.n, activation='linear'))
+model.add(Conv2D(filters=128, kernel_size=3, strides=1, activation="relu", input_shape=(4, 112, 160),  data_format="channels_first"))
+model.add(Conv2D(filters=64, kernel_size=4, strides=2, activation="relu" ))
+model.add(GlobalAveragePooling2D())
 
+model.add(Dense(256, activation='relu'))
+model.add(Dense(128,activation='relu'))
+model.add(Dense(env.action_space.n, activation='linear'))
 
 policy = EpsGreedyQPolicy()
 memory = SequentialMemory(limit=50000, window_length=1)
@@ -44,5 +41,5 @@ player1 = DQNAgent(model=model,
 player1.compile(Adam(lr=1e-3), metrics=['mae'])
 
 
-player1.load_weights('mk_7.h5f')
-player1.test(env,nb_episodes= 10, visualize=True)
+player1.load_weights('mk_13.h5f')
+player1.test(env,nb_episodes= 10, visualize=False)
