@@ -1,14 +1,14 @@
 # Mortal kombat 2 Sega genesis AI bot
 
 ## Req
-Python 3.6
--Gym-retro
--Gym
--Tensorflow 1.15
--Keras 1.15 
--KerasRL (with some modifications)
--Baselines
--wandb
+Python 3.6 requirements:
+-Gym-retro  
+-Gym  
+-Tensorflow 1.15  
+-Keras 1.15  
+-KerasRL (with some modifications)  
+-Baselines  
+-wandb  
 
 ## Files
 ##scripts: 
