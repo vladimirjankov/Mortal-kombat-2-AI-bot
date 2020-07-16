@@ -12,7 +12,7 @@ Python 3.6 requirements:
 
 ## Files  
 
-##scripts:   
+######scripts:   
 	mortalkombat_env.py - setup of retro env for mortal kombat.   
 	Implementaion of custom action and training wrapper for the env.
 	train_model.py - training of deep q neural network  
@@ -20,6 +20,6 @@ Python 3.6 requirements:
 	train.sh - runes the the training script on slurm workload manager  
 	test.sh - runes the the test script on slurm workload manager  
   
-##models:  
+######models:  
 	Trained models for Liu Kang.   
 	14 models present  
