@@ -9,7 +9,7 @@
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=vlajkojjj@gmail.com
 
-python3 -m retro.import ~/projects/ProjectForComputerVision/
+python3 -m retro.import ~/projects/ProjectForComputerVision/scripts
 
 python3 test_model.py
 

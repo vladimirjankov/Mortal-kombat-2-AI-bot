@@ -8,39 +8,65 @@ import tensorflow as tf
 from gym import wrappers 
 import cv2
 
-# some random comment
-
+# ObesrvationWraperClass for mortal kombat 
 class ObservationWraperMK(gym.ObservationWrapper):
 
     def __init__(self, env):
+        #base observer
         super(ObservationWraperMK, self).__init__(env)
-        self.num_resets = 0
-        self.player_hp = 120 # bot hp
+        
+        #number of resets in env
+        self.num_resets = 0 
+        
+        # players hp set to max at beginning (bot in training)
+        self.player_hp = 120 
+        
+        #number of current frame
         self.current_frame_number = 0
+        
+        #number of frames to skip
         self.frame_skipping = 2
-        self.enemy_hp = 120 # in_game bot hp 
+        
+        #in game bot hp
+        self.enemy_hp = 120
+        
+        #set gym observation space
         self.observation_space = gym.spaces.Box(low=0, high=255, shape=(160, 112))
+        
+        #init deque
         self.q = deque(maxlen=4)
 
     @staticmethod
     def process(img):
-#        img = img[:, :, 0] * 0.299 + img[:, :, 1] * 0.587 + img[:, :, 2] * 0.114
+        """
         
+        process function of each step, reshapes the image 
+        and filters it with laplacian, converts the image 
+        to uint8 type
+        
+        """
         img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) 
         x_t = cv2.resize(img, (112, 160), interpolation=cv2.INTER_AREA)
-        #x_t = np.reshape(x_t, (64, 64))
-#        x_t = cv2.resize(img, (200, 127), interpolation=cv2.INTER_AREA)
-
-        
         x_t = np.nan_to_num(x_t)
         x_t = cv2.Laplacian(x_t,cv2.CV_8U)
 
         return x_t.astype(np.uint8)
 
     def observation(self, observation):
+        """
+    
+        returns a observation 
+    
+        """
         return ObservationWraperMK.process(observation)
 
     def reset(self, **kwargs):
+
+        """
+    
+        resets the environment and sets the player hp to init state
+    
+        """
 
         # on a reset we set the health back to 120
         self.player_hp = 120
@@ -56,6 +82,7 @@ class ObservationWraperMK(gym.ObservationWrapper):
         # the observation
         obs = self.observation(observation)
         self.current_frame_number = 0
+        
         # fill up the queue
         for i in range(4):
             self.q.append(obs)
@@ -63,6 +90,12 @@ class ObservationWraperMK(gym.ObservationWrapper):
         return np.array(list(self.q))
 
     def step(self,action):
+        """
+    
+        step function, returns reward and checks if done reward 
+        is given based on difference of hp health and enemy_health.
+    
+        """
         observation, reward, done, info = self.env.step(action)
         if info["health"] <= 0 or info["enemy_health"] <= 0:
             self.player_hp = 120
@@ -89,11 +122,16 @@ class ObservationWraperMK(gym.ObservationWrapper):
         return np.array(list(self.q)), reward, done, info
 
             
-
-
 class PlayerOneNetworkControllerWrapper(gym.ActionWrapper):
 
     def __init__(self, env):
+        """
+
+        sets the buttons that are being used by player one bot
+        multyple combination can be set. Inits action space from
+        gym module.
+
+        """
         super(PlayerOneNetworkControllerWrapper, self).__init__(env)
         buttons = ["B", "A", "MODE", "START", "UP", "DOWN", "LEFT", "RIGHT", "C", "Y", "X", "Z"]
         actions = [['LEFT'], ['RIGHT'], ['LEFT', 'DOWN'], ['RIGHT', 'DOWN'],['LEFT', 'UP'],['RIGHT', 'UP'],
@@ -119,6 +157,10 @@ class PlayerOneNetworkControllerWrapper(gym.ActionWrapper):
 
 
 def make_env():
+    """
+    creates and mortal kombat 2 sega genesis environment
+    with observation wrapper and controller wrapper
+    """
     aigym_path = "video/"
     env = retro.make(game='MortalKombatII-Genesis',state='Level1.LiuKangVsJax')
     env = wrappers.Monitor(env, aigym_path,video_callable=False  ,force=True) #, video_callable=False 
