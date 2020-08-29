@@ -6,7 +6,7 @@ Conv Layer with 64 filter with kernel size 4
 Global average pooling 2D  
 Dense layer 256  
 Dense layer 128  
-Dense with number of actions
+Dense with number of actions  
 ![alt text](https://i.ytimg.com/vi/-gl71qZoZw8/hqdefault.jpg)
 
 ## Req
