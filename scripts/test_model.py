@@ -42,3 +42,5 @@ player1.compile(Adam(lr=1e-3), metrics=['mae'])
 #loads weights and tests the model
 player1.load_weights('mk_13.h5f')
 player1.test(env,nb_episodes= 10, visualize=False)
+
+# tu je i vlajko
