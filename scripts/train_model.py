@@ -50,3 +50,5 @@ print(model.summary())
 player1.save_weights(r'../models/mk_18.h5f', overwrite=True)
 
 #player1.test(env, nb_episodes=10, visualize=False)
+
+#sandrina grana <3
